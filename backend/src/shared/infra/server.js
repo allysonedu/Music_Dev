@@ -2,14 +2,16 @@ require('dotenv').config();
 
 const express = require('express');
 
+const routes = require('./routes');
+
 const server = express();
 
 server.use(express.json());
 
-server.get('/hello', (req, res) => {
-  return res.json({ message: 'hello world' });
+server.get('/health', (req, res) => {
+  return res.json({ message: 'App is running' });
 });
-
-server.listen(3333, () => {
-  console.log('Server is running on port 3333');
+server.use(routes);
+server.listen(process.env.PORT, () => {
+  console.log(`Server is running ${process.env.PORT}`);
 });
