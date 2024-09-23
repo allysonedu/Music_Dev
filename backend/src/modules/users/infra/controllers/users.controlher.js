@@ -1,18 +1,29 @@
-const { response } = require('express');
-
-class UsersController {
-  async createUsers(request, request) {
-    return response.json({ create: true });
-  }
-  async getAllUsers(request, request) {
-    return response.json({ getAll: true });
-  }
-  async updateUsers(request, request) {
-    return response.json({ update: true });
-  }
-  async deleteUsers(request, request) {
-    return response.json({ delete: true });
-  }
-}
-
-module.exports = UsersController;
+/**
+ * Controller controla todo o fluxo de entrada e saida dos dados da aplicação
+ */
+const usersRepository = require('../../repositories/repository');
+const CreateUserService = require('../../services/CreateUserService');
+module.exports = {
+  async createUser(request, response) {
+    const { name, email, password } = request.body;
+    const createUser = new CreateUserService(usersRepository);
+    const user = await createUser.execute({
+      name,
+      email,
+      password,
+    });
+    return response.json({ data: user });
+  },
+  async updateUser(request, response) {
+    return response.json({ message: 'User updated' });
+  },
+  async deleteUser(request, response) {
+    return response.json({ message: 'User deleted' });
+  },
+  async listUser(request, response) {
+    return response.json({ message: 'User listed' });
+  },
+  async updateAvatar(request, response) {
+    return response.json({ message: 'Avatar updated' });
+  },
+};
