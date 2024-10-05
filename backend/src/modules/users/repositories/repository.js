@@ -2,11 +2,25 @@
  * Responsabilidade da repository é acessar o nosso banco de dados
  */
 const connection = require('../../../shared/database/connection');
+const { listAllUsers } = require('../infra/controllers/users.controlher');
 module.exports = {
   async findByEmail(email) {
     return connection('users').where('email', email).first();
   },
+
   async create(payload) {
-    return connection('users').insert(payload).returning('*');
+    const user = await connection('users').insert(payload).returning('*');
+
+    return user[0];
+  },
+
+  async listAll() {
+    return connection('users')
+      .select('id', 'name', 'email', 'created_at')
+      .orderBy('created_at', 'desc');
+  },
+
+  async saveTokenInDb(userId, token) {
+    return connection('user_tokens').insert({ user_id: userId, token });
   },
 };
