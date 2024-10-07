@@ -13,4 +13,12 @@ module.exports = {
       .toString()
       .substring(0, 6);
   },
+
+  async comparePassword(password, hash) {
+    const compare = await bcrypt.compare(password, hash);
+
+    if (!compare) {
+      throw new Error('Invalid password/email', 401);
+    }
+  },
 };
